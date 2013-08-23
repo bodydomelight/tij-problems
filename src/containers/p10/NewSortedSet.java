@@ -59,7 +59,7 @@ public class NewSortedSet<E> implements SortedSet<E> {
 
     @Override
     public Iterator<E> iterator() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return base.iterator();
     }
 
     @Override
@@ -84,7 +84,7 @@ public class NewSortedSet<E> implements SortedSet<E> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return base.contains(c);
+        return base.containsAll(c);
     }
 
     @Override
