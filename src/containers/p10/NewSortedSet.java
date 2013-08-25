@@ -184,7 +184,7 @@ public class NewSortedSet<E> implements SortedSet<E> {
                 throw new NullPointerException("The element is null");
             }
             if (!(o1 instanceof Comparable) || !(o1 instanceof Comparable)) {
-                throw new ClassCastException("One of elements are not Comparable");
+                throw new ClassCastException("One of elements is not Comparable");
             }
             return ((Comparable) o1).compareTo(o2);
         }
