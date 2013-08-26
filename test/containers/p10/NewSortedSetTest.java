@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package containers.p10;
 
 import java.util.ArrayList;
@@ -10,17 +6,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 
 /**
  *
@@ -41,7 +35,6 @@ public class NewSortedSetTest {
      */
     @Test
     public void testComparator01() {
-        System.out.println("comparator01");
         NewSortedSet<String> instance = new NewSortedSet<>();
         Comparator result = instance.comparator();
         assertTrue(result instanceof Comparator);
@@ -52,7 +45,6 @@ public class NewSortedSetTest {
      */
     @Test
     public void testComparator02() {
-        System.out.println("comparator02");
         NewSortedSet<String> instance = new NewSortedSet<>();
         Comparator comparator = instance.comparator();
         assertTrue(comparator.compare("A", "A") == 0);
@@ -151,7 +143,6 @@ public class NewSortedSetTest {
         instance.addAll(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
         Set<Integer> expResult = new TreeSet(Arrays.asList(5, 6, 7, 8, 9));
         Set<Integer> result = instance.tailSet(5);
-        printResults(expResult, result);
         assertEquals(expResult, result);
     }
 
@@ -251,42 +242,113 @@ public class NewSortedSetTest {
      */
     @Test
     public void testContains() {
-        System.out.println("contains");
-        Object o = null;
-        NewSortedSet instance = new NewSortedSet();
-        boolean expResult = false;
-        boolean result = instance.contains(o);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        NewSortedSet<String> instance = new NewSortedSet<>();
+        instance.addAll(Arrays.asList("A B C D E F G H I J K".split(" ")));
+        assertTrue(instance.contains("D"));
+        assertFalse(instance.contains("0"));
+        instance.add("Z");
+        assertTrue(instance.contains("Z"));
+        instance.remove("B");
+        assertFalse(instance.contains("B"));
+    }
+
+    @Test
+    public void testContainsNull() {
+        NewSortedSet<Object> instance = new NewSortedSet<>();
+        assertFalse(instance.contains(null));
+        instance.addAll(Arrays.asList("A B C D E F G H I J K".split(" ")));
+        assertFalse(instance.contains(null));
     }
 
     /**
      * Test of iterator method, of class NewSortedSet.
      */
     @Test
-    public void testIterator() {
-        System.out.println("iterator");
-        NewSortedSet instance = new NewSortedSet();
-        Iterator expResult = null;
-        Iterator result = instance.iterator();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testIteratorHasNext() {
+        NewSortedSet<Integer> instance = new NewSortedSet();
+        Iterator<Integer> it = instance.iterator();
+        assertFalse(it.hasNext());
+        instance.add(42);
+        it = instance.iterator();
+        assertTrue(it.hasNext());
+    }
+
+    @Test
+    public void testIteratorNext() {
+        NewSortedSet<Integer> instance = new NewSortedSet();
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.addAll(expResult);
+        Collections.sort(expResult);
+        Iterator<Integer> it = instance.iterator();
+        Iterator<Integer> it2 = expResult.iterator();
+        while (it.hasNext()) {
+            assertTrue(it.next().equals(it2.next()));
+        }
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testIteratorNextException() {
+        NewSortedSet<Integer> instance = new NewSortedSet();
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.addAll(expResult);
+        Iterator<Integer> it = instance.iterator();
+        while (true) {
+            it.next();
+        }
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testIteratorNextExceptionEmpty() {
+        NewSortedSet<Integer> instance = new NewSortedSet();
+        Iterator<Integer> it = instance.iterator();
+        it.next();
+    }
+
+    @Test
+    public void testIteratorRemove() {
+        NewSortedSet<Integer> instance = new NewSortedSet();
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.addAll(expResult);
+        Iterator<Integer> it = instance.iterator();
+        it.next();
+        it.next();
+        it.next();
+        it.remove();
+        assertFalse(instance.contains(11));
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testIteratorRemoveEmpty() {
+        NewSortedSet<Integer> instance = new NewSortedSet();
+        Iterator<Integer> it = instance.iterator();
+        it.remove();
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testIteratorRemoveIllegal() {
+        NewSortedSet<Integer> instance = new NewSortedSet();
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.addAll(expResult);
+        Iterator<Integer> it = instance.iterator();
+        it.remove();
     }
 
     /**
      * Test of toArray method, of class NewSortedSet.
      */
     @Test
-    public void testToArray_0args() {
-        System.out.println("toArray");
-        NewSortedSet instance = new NewSortedSet();
-        Object[] expResult = null;
-        Object[] result = instance.toArray();
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+    public void testToArray() {
+        NewSortedSet<Integer> instance = new NewSortedSet<>();
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.addAll(expResult);
+        Collections.sort(expResult);
+        assertArrayEquals(expResult.toArray(), instance.toArray());
+    }
+
+    @Test
+    public void testToArray0Args() {
+        NewSortedSet<Integer> instance = new NewSortedSet<>();
+        assertArrayEquals(new Integer[0], instance.toArray());
     }
 
     /**
@@ -294,14 +356,12 @@ public class NewSortedSetTest {
      */
     @Test
     public void testToArray_GenericType() {
-        System.out.println("toArray");
-        String[] a;
-        NewSortedSet instance = new NewSortedSet();
-        Object[] expResult = null;
-        Object[] result = instance.toArray();
-        assertArrayEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        NewSortedSet<Integer> instance = new NewSortedSet<>();
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.addAll(expResult);
+        Collections.sort(expResult);
+        assertArrayEquals(expResult.toArray(new Object[1]), instance.toArray(new Object[0]));
+        assertTrue(instance.toArray(new Integer[0]) instanceof Integer[]);
     }
 
     /**
@@ -309,14 +369,21 @@ public class NewSortedSetTest {
      */
     @Test
     public void testAdd() {
-        System.out.println("add");
-        Object e = null;
-        NewSortedSet instance = new NewSortedSet();
-        boolean expResult = false;
-        boolean result = instance.add(e);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        NewSortedSet<Integer> instance = new NewSortedSet<>();
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        for (Integer i : expResult) {
+            assertFalse(instance.contains(i));
+            assertTrue(instance.add(i));
+            assertFalse(instance.add(i));
+            assertTrue(instance.contains(i));
+        }
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testAddNull() {
+        NewSortedSet<Integer> instance = new NewSortedSet<>();
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.add(null);
     }
 
     /**
@@ -324,14 +391,23 @@ public class NewSortedSetTest {
      */
     @Test
     public void testRemove() {
-        System.out.println("remove");
-        Object o = null;
-        NewSortedSet instance = new NewSortedSet();
-        boolean expResult = false;
-        boolean result = instance.remove(o);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        NewSortedSet<Integer> instance = new NewSortedSet<>();
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.addAll(expResult);
+        for (Integer i : expResult) {
+            assertTrue(instance.contains(i));
+            assertTrue(instance.remove(i));
+            assertFalse(instance.remove(i));
+            assertFalse(instance.contains(i));
+        }
+    }
+
+    @Test
+    public void testRemoveInapropriateType() {
+        NewSortedSet<Integer> instance = new NewSortedSet<>();
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.addAll(expResult);
+        assertFalse(instance.remove(new ArrayList<Object>()));
     }
 
     /**
@@ -339,30 +415,30 @@ public class NewSortedSetTest {
      */
     @Test
     public void testContainsAll() {
-        System.out.println("containsAll");
-        Collection<?> c = null;
-        NewSortedSet instance = new NewSortedSet();
-        boolean expResult = false;
-        boolean result = instance.containsAll(c);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        NewSortedSet<Integer> instance = new NewSortedSet<>();
+        assertTrue(instance.containsAll(new ArrayList<>()));
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.addAll(expResult);
+        assertTrue(instance.containsAll(instance));
+        assertTrue(instance.containsAll(new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61))));
+        assertTrue(instance.containsAll(new ArrayList<>(Arrays.asList(23, 45, 65))));
+        assertTrue(instance.containsAll(new ArrayList<>(Arrays.asList(0))));
+        assertFalse(instance.containsAll(new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61, 7))));
+        assertFalse(instance.containsAll(new ArrayList<>(Arrays.asList(7))));
     }
 
     /**
      * Test of addAll method, of class NewSortedSet.
      */
-    @Ignore("not ready")
     @Test
     public void testAddAll() {
-        System.out.println("addAll");
-        Collection<? extends E> c = null;
-        NewSortedSet instance = new NewSortedSet();
-        boolean expResult = false;
-        boolean result = instance.addAll(c);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        NewSortedSet<Float> instance = new NewSortedSet<>();
+        Collection<Float> c = Arrays.asList(2.1f, 2.2f, 2.3f, 3.7f, 4.6f);
+        instance.addAll(c);
+        for (Float f : c) {
+            assertTrue(instance.contains(f));
+        }
+        assertTrue(instance.containsAll(c));
     }
 
     /**
@@ -370,14 +446,13 @@ public class NewSortedSetTest {
      */
     @Test
     public void testRetainAll() {
-        System.out.println("retainAll");
-        Collection<?> c = null;
-        NewSortedSet instance = new NewSortedSet();
-        boolean expResult = false;
-        boolean result = instance.retainAll(c);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        NewSortedSet<Integer> instance = new NewSortedSet<>();
+        assertTrue(instance.containsAll(new ArrayList<>()));
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.addAll(expResult);
+        instance.retainAll(new ArrayList<>(Arrays.asList(65, 0, 17)));
+        assertTrue(instance.size() == 2);
+        assertTrue(instance.containsAll(new ArrayList<>(Arrays.asList(65, 0))));
     }
 
     /**
@@ -385,14 +460,13 @@ public class NewSortedSetTest {
      */
     @Test
     public void testRemoveAll() {
-        System.out.println("removeAll");
-        Collection<?> c = null;
-        NewSortedSet instance = new NewSortedSet();
-        boolean expResult = false;
-        boolean result = instance.removeAll(c);
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        NewSortedSet<Integer> instance = new NewSortedSet<>();
+        assertTrue(instance.containsAll(new ArrayList<>()));
+        List<Integer> expResult = new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        instance.addAll(expResult);
+        instance.removeAll(new ArrayList<>(Arrays.asList(65, 0, 17)));
+        assertTrue(instance.size() == 8);
+        assertTrue(instance.containsAll(new ArrayList<>(Arrays.asList(23, 45, 34, 28, 11, 82, 5, 61))));
     }
 
     /**
@@ -400,15 +474,12 @@ public class NewSortedSetTest {
      */
     @Test
     public void testClear() {
-        System.out.println("clear");
-        NewSortedSet instance = new NewSortedSet();
+        NewSortedSet<Integer> instance = new NewSortedSet<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61));
+        assertTrue(instance.size() > 0);
         instance.clear();
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
-    }
-
-    private void printResults(Object expResult, Object result) {
-        System.out.println("expResult" + expResult);
-        System.out.println("result" + result);
+        assertTrue(instance.isEmpty());
+        for (Integer i : new ArrayList<>(Arrays.asList(23, 45, 65, 0, 34, 28, 11, 82, 5, 61))) {
+            assertFalse(instance.contains(i));
+        }
     }
 }
