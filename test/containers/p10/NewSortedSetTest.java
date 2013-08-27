@@ -377,6 +377,12 @@ public class NewSortedSetTest {
             assertFalse(instance.add(i));
             assertTrue(instance.contains(i));
         }
+        Collections.sort(expResult);
+        Iterator<Integer> i1 = instance.iterator();
+        Iterator<Integer> i2 = expResult.iterator();
+        while (i1.hasNext()) {
+            assertTrue(i1.next().equals(i2.next()));
+        }
     }
 
     @Test(expected = NullPointerException.class)
