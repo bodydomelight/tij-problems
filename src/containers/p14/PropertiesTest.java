@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package collections.p14;
+package containers.p14;
 
 import java.util.concurrent.*;
 import java.util.*;
