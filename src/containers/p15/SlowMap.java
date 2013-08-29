@@ -39,6 +39,22 @@ public class SlowMap<K, V> extends AbstractMap<K, V> {
         return set;
     }
 
+    @Override
+    public V remove(Object key) {
+        V oldValue = get(key);
+        if (keys.contains(key)) {
+            values.remove(keys.indexOf(key));
+            keys.remove(key);
+        }
+        return oldValue;
+    }
+
+    @Override
+    public void clear() {
+        keys.clear();
+        values.clear();
+    }
+
     public static void main(String[] args) {
         TextFile tf = new TextFile(".\\src\\containers\\p13\\test.txt", "\\W+");
         SlowMap<String, Integer> aa = new SlowMap<>();
