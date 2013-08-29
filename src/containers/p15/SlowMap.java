@@ -30,7 +30,30 @@ public class SlowMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public Set<Map.Entry<K, V>> entrySet() {
-        Set<Map.Entry<K, V>> set = new HashSet<>();
+        Set<Map.Entry<K, V>> set = new HashSet<Map.Entry<K, V>>() {
+            @Override
+            public Iterator<Map.Entry<K, V>> iterator() {
+                return new Iterator<Map.Entry<K, V>>() {
+                    Iterator<K> ki = keys.iterator();
+                    Iterator<V> vi = values.iterator();
+
+                    @Override
+                    public boolean hasNext() {
+                        return false;
+                    }
+
+                    @Override
+                    public Entry<K, V> next() {
+                        return null;
+                    }
+
+                    @Override
+                    public void remove() {
+                        
+                    }
+                };
+            }
+        };
         Iterator<K> ki = keys.iterator();
         Iterator<V> vi = values.iterator();
         while (ki.hasNext()) {
