@@ -30,36 +30,7 @@ public class SlowMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public Set<Map.Entry<K, V>> entrySet() {
-        Set<Map.Entry<K, V>> set = new HashSet<Map.Entry<K, V>>() {
-            @Override
-            public Iterator<Map.Entry<K, V>> iterator() {
-                return new Iterator<Map.Entry<K, V>>() {
-                    Iterator<K> ki = keys.iterator();
-                    Iterator<V> vi = values.iterator();
-
-                    @Override
-                    public boolean hasNext() {
-                        return false;
-                    }
-
-                    @Override
-                    public Entry<K, V> next() {
-                        return null;
-                    }
-
-                    @Override
-                    public void remove() {
-                        
-                    }
-                };
-            }
-        };
-        Iterator<K> ki = keys.iterator();
-        Iterator<V> vi = values.iterator();
-        while (ki.hasNext()) {
-            set.add(new MapEntry<>(ki.next(), vi.next()));
-        }
-        return set;
+        return new EntrySet();
     }
 
     @Override
@@ -76,6 +47,46 @@ public class SlowMap<K, V> extends AbstractMap<K, V> {
     public void clear() {
         keys.clear();
         values.clear();
+    }
+
+    private class EntrySet extends AbstractSet<Map.Entry<K, V>> {
+
+        @Override
+        public Iterator<Entry<K, V>> iterator() {
+            return new Iterator<Entry<K, V>>() {
+                Iterator<K> ki = keys.iterator();
+                K currentKey;
+
+                @Override
+                public boolean hasNext() {
+                    return ki.hasNext();
+                }
+
+                @Override
+                public Entry<K, V> next() {
+                    if (!ki.hasNext()) {
+                        throw new NoSuchElementException();
+                    }
+                    currentKey = ki.next();
+                    return new MapEntry<>(currentKey, values.get(keys.indexOf(currentKey)));
+                }
+
+                @Override
+                public void remove() {
+                    if (currentKey == null) {
+                        throw new IllegalStateException();
+                    }
+                    values.remove(keys.indexOf(currentKey));
+                    ki.remove();
+                    currentKey = null;
+                }
+            };
+        }
+
+        @Override
+        public int size() {
+            return keys.size();
+        }
     }
 
     public static void main(String[] args) {

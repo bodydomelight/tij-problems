@@ -41,7 +41,7 @@ public class Maps {
     }
 
     public static void main(String[] args) {
-//        test(new SlowMap<Integer, String>());
-        test(new HashMap<Integer, String>());
+        test(new SlowMap<Integer, String>());
+//        test(new HashMap<Integer, String>());
     }
 }
