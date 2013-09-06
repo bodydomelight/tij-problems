@@ -1,8 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-package containers.p31;
+package containers.p32;
 
 import containers.p29.TestParam;
 import java.util.ArrayList;
@@ -11,11 +7,11 @@ import java.util.List;
 
 class Container {
 
-    String[] array;
+    int[] array;
     int index;
 
     public Container(int i) {
-        array = new String[i];
+        array = new int[i];
         index = 0;
     }
 
@@ -23,21 +19,27 @@ class Container {
         this(50);
     }
 
-    public void add(String str) {
+    public void add(int str) {
         if (index >= array.length) {
-            String[] tempArray = Arrays.copyOf(array, array.length + 200);
+            int[] tempArray = Arrays.copyOf(array, array.length + 200);
             array = tempArray;
         }
         array[index++] = str;
     }
 
-    public String get(int position) {
+    public int get(int position) {
         return array[position];
+    }
+
+    public void set(int ind, int value) {
+//        System.out.println("array.size :" + array.length + " index : " + ind);
+        array[ind] = value;
     }
 
     public int size() {
         return array.length;
     }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -53,7 +55,7 @@ class Container {
 public class ContainersTest {
 
     static List<Test<Container>> tests1 = new ArrayList<>();
-    static List<Test<ArrayList<String>>> tests2 = new ArrayList<>();
+    static List<Test<ArrayList<Integer>>> tests2 = new ArrayList<>();
     final static int LOOPS = 10000;
 
     static {
@@ -61,18 +63,18 @@ public class ContainersTest {
             @Override
             int test(Container container, TestParam tp) {
                 for (int i = 0; i < LOOPS; i++) {
-                    container.add(i + "");
-                    container.get(i);
+                    container.add(i);
+                    container.set(i, container.get(i) + 1);
                 }
                 return LOOPS;
             }
         });
-        tests2.add(new Test<ArrayList<String>>("addget") {
+        tests2.add(new Test<ArrayList<Integer>>("addget") {
             @Override
-            int test(ArrayList<String> container, TestParam tp) {
+            int test(ArrayList<Integer> container, TestParam tp) {
                 for (int i = 0; i < LOOPS; i++) {
-                    container.add(i + "");
-                    container.get(i);
+                    container.add(Integer.valueOf(i));
+                    container.set(i, container.get(i) + 1);
                 }
                 return LOOPS;
             }
@@ -82,6 +84,6 @@ public class ContainersTest {
     public static void main(String[] args) {
         Tester.defaultParams = TestParam.array(LOOPS, 1);
         Tester.run(new Container(), tests1);
-        Tester.run(new ArrayList<String>(), tests2);
+        Tester.run(new ArrayList<Integer>(), tests2);
     }
 }
