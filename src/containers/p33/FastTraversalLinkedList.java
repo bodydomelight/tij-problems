@@ -193,6 +193,7 @@ class E33_ListPerformance3 {
             @Override
             int test(List<Integer> list, TestParam tp) {
                 int count = 0;
+//                System.out.println("list.size: " + list.size());
                 for (int i = list.size() / 2; i < list.size(); i++) {
                     ++count;
                     list.remove(i);
@@ -228,15 +229,14 @@ class E33_ListPerformance3 {
         }
 // Convenience method:
 
-        public static void run(List<Integer> list,
-                List<Test<List<Integer>>> tests) {
+        public static void run(List<Integer> list, List<Test<List<Integer>>> tests) {
             new ListTester(list, tests).timedTest();
         }
     }
 
     public static void main(String[] args) {
-        ListTester.run(new ArrayList<Integer>(), tests);
-        ListTester.run(new LinkedList<Integer>(), tests);
+//        ListTester.run(new ArrayList<Integer>(), tests);
+//        ListTester.run(new LinkedList<Integer>(), tests);
         ListTester.run(new FastTraversalLinkedList<Integer>(), tests);
         ListTester.run(new FastTravelLinkedList<Integer>(), tests);
     }

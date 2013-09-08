@@ -35,8 +35,7 @@ public class Tester<C> {
         }
     }
 
-    public Tester(C container, List<Test<C>> tests,
-            TestParam[] paramList) {
+    public Tester(C container, List<Test<C>> tests, TestParam[] paramList) {
         this(container, tests);
         this.paramList = paramList;
     }
@@ -88,7 +87,7 @@ public class Tester<C> {
 // Call the overriden method:
                 int reps = test.test(kontainer, param);
                 long duration = System.nanoTime() - start;
-                long timePerRep = duration / reps; // Nanoseconds
+                long timePerRep = duration / reps + 1; // Nanoseconds
                 System.out.format(numberField(), timePerRep);
             }
             System.out.println();

@@ -40,15 +40,21 @@ public class FastTravelLinkedList<V> extends AbstractList<V> {
             return list.size();
         }
 
-        private boolean add(V element) {
-            synchronize();
-            changed = true;
-            return list.add(element);
-        }
-
         private V get(int index) {
             synchronize();
             return list.get(index);
+        }
+
+        private boolean remove(Object o) {
+            synchronize();
+            changed = true;
+            return list.remove(o);
+        }
+
+        private V remove(int index) {
+            synchronize();
+            changed = true;
+            return list.remove(index);
         }
 
         @Override
@@ -57,10 +63,14 @@ public class FastTravelLinkedList<V> extends AbstractList<V> {
             return list.toString();
         }
 
+        private void clear() {
+            list.clear();
+        }
+
         private void synchronize() {
             if (companion.changed) {
                 list = new ArrayList<>(l.list);
-                changed = false;
+                companion.changed = false;
             }
         }
     }
@@ -75,16 +85,10 @@ public class FastTravelLinkedList<V> extends AbstractList<V> {
             companion = other;
         }
 
-        private boolean remove(Object o) {
+        private boolean add(V element) {
             synchronize();
             changed = true;
-            return list.remove(o);
-        }
-
-        private V remove(int index) {
-            synchronize();
-            changed = true;
-            return list.remove(index);
+            return list.add(element);
         }
 
         private void add(int index, V element) {
@@ -113,21 +117,21 @@ public class FastTravelLinkedList<V> extends AbstractList<V> {
             return list.listIterator(index);
         }
 
-        private void update() {
-            list = new LinkedList<>(a.list);
-            changed = false;
+        private void clear() {
+            list.clear();
         }
 
         private void synchronize() {
             if (companion.changed) {
-                l.update();
+                list = new LinkedList<>(a.list);
+                companion.changed = false;
             }
         }
     }
 
     @Override
     public boolean add(V element) {
-        return a.add(element);
+        return l.add(element);
     }
 
     @Override
@@ -147,12 +151,12 @@ public class FastTravelLinkedList<V> extends AbstractList<V> {
 
     @Override
     public boolean remove(Object o) {
-        return l.remove(o);
+        return a.remove(o);
     }
 
     @Override
     public V remove(int index) {
-        return l.remove(index);
+        return a.remove(index);
     }
 
     @Override
@@ -172,8 +176,8 @@ public class FastTravelLinkedList<V> extends AbstractList<V> {
 
     @Override
     public void clear() {
-        a.list.clear();
-        l.list.clear();
+        a.clear();
+        l.clear();
     }
 
     @Override
@@ -191,6 +195,7 @@ public class FastTravelLinkedList<V> extends AbstractList<V> {
         for (int i = 0; i < 10; i++) {
             f.add(i + "");
         }
+
         System.out.println("f: " + f);
         f.add("Z");
         System.out.println("f.add(\"Z\"): " + f);
@@ -207,32 +212,30 @@ public class FastTravelLinkedList<V> extends AbstractList<V> {
         while (it.hasNext()) {
             System.out.print(it.next() + ", ");
         }
-//        System.out.println();
-//        System.out.println("it.previous() + it.remove()");
+        System.out.println();
+        System.out.println("it.previous() + it.remove()");
 //        while (it.hasPrevious()) {
 //            System.out.print(it.previous() + ", ");
 //            it.remove();
 //        }
-//        System.out.println();
-//        System.out.println("f: " + f);
+        System.out.println();
+        System.out.println("f: " + f);
         it = f.iterator();
-        it.next();
         while (it.hasNext()) {
-
-            it.remove();
             it.next();
+            it.remove();
         }
-        it.remove();
         System.out.println();
         System.out.println("after loop f: " + f);
+        f.add("A");
         it = f.iterator();
-        System.out.println("it.next(): " + it.next());
+//        System.out.println("it.next(): " + it.next());
         f.add("X");
-//        try {
-//            System.out.println("it.next(): " + it.next());
-//        } catch (ConcurrentModificationException e) {
-//            System.out.println("ConcurrentModificationException caught.");
-//        }
+        try {
+            System.out.println("it.next(): " + it.next());
+        } catch (ConcurrentModificationException e) {
+            System.out.println("ConcurrentModificationException caught.");
+        }
 
     }
 }
