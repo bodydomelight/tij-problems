@@ -1,4 +1,4 @@
-package containers.p33;
+package containers.p34;
 
 import java.util.*;
 
@@ -87,7 +87,7 @@ public class Tester<C> {
 // Call the overriden method:
                 int reps = test.test(kontainer, param);
                 long duration = System.nanoTime() - start;
-                long timePerRep = duration / reps; // Nanoseconds
+                long timePerRep = duration / reps + 1; // Nanoseconds
                 System.out.format(numberField(), timePerRep);
             }
             System.out.println();
