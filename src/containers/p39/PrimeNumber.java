@@ -19,9 +19,10 @@ public class PrimeNumber {
         }
         boolean[] ints = new boolean[size + 1 - number];
         int factor = (int) Math.floor(Math.sqrt(size));
+        //sieve
         for (int i = 2; i <= factor; i++) {
             for (int j = i * 2; j <= size; j += i) {
-                if (j - number > 0) {
+                if (j > number) {
                     ints[j - number] = true;
                 }
             }
