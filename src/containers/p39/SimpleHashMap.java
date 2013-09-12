@@ -1,18 +1,18 @@
 package containers.p39;
 
-import containers.p25.*;
+import containers.p25.MapEntry;
 import java.util.*;
-import net.mindview.util.*;
+import net.mindview.util.Countries;
 
 public class SimpleHashMap<K, V> extends AbstractMap<K, V> {
 
-    private int SIZE = 32;
-    private int size = 0;
-    LinkedList<MapEntry<K, V>>[] buckets = new LinkedList[SIZE];
+    private int maxSize = 10;
+    private int currentSize = 0;
+    LinkedList<MapEntry<K, V>>[] buckets = new LinkedList[maxSize];
 
     @Override
     public V put(K key, V value) {
-        //rehash();
+        rehash();
         V oldValue = null;
         int index = getIndex((K) key);
         MapEntry<K, V> pair = new MapEntry<>(key, value);
@@ -24,22 +24,20 @@ public class SimpleHashMap<K, V> extends AbstractMap<K, V> {
 
             boolean found = false;
             MapEntry<K, V> currentEntry = bucket.getFirst();
-            while (currentEntry.getNextEntry() != null) {
-                MapEntry<K, V> iPair = currentEntry.getNextEntry();
+            while (currentEntry != null) {
 
-                if (iPair.getKey().equals(key)) {
-                    oldValue = iPair.getValue();
-                    currentEntry.setNextEntry(pair);
-                    pair.setNextEntry(iPair.getNextEntry());
-                    bucket.set(bucket.indexOf(iPair), pair); // Replace old with new
+                if (currentEntry.getKey().equals(key)) {
+                    oldValue = currentEntry.getValue();
+                    currentEntry.setValue(value);
                     found = true;
                     break;
                 }
+                currentEntry = currentEntry.getNextEntry();
             }
             if (!found) {
                 buckets[index].getLast().setNextEntry(pair);
                 buckets[index].add(pair);
-                size++;
+                currentSize++;
             }
         }
         return oldValue;
@@ -68,7 +66,7 @@ public class SimpleHashMap<K, V> extends AbstractMap<K, V> {
                 if (iPair.getKey().equals(key)) {
                     oldValue = iPair.getValue();
                     bucket.remove(iPair);
-                    size--;
+                    currentSize--;
                     break;
                 }
             }
@@ -92,38 +90,42 @@ public class SimpleHashMap<K, V> extends AbstractMap<K, V> {
 
     @Override
     public void clear() {
-        buckets = new LinkedList[SIZE];
-        size = 0;
+        buckets = new LinkedList[maxSize];
+        currentSize = 0;
     }
 
     @Override
     public int size() {
-        return size;
+//        return entrySet().currentSize();
+        return currentSize;
     }
 
     @Override
     public boolean isEmpty() {
-        return size == 0;
+//        return entrySet().isEmpty();
+        return currentSize == 0;
     }
 
     private void rehash() {
-        if ((float) size / (float) SIZE > 0.75) {
-//            System.out.println("rehashing");
-//            System.out.println("SIZE: " + SIZE);
-            SIZE = PrimeNumber.getNextPrimeNumberAfter(SIZE * 2);
-//            System.out.println("new SIZE: " + SIZE);
+        if ((float) currentSize / (float) maxSize > 0.75) {
+//            System.out.print("rehashing, old maxSize: " + maxSize + 
+//                    "; new should be bigger than: " + (2 * maxSize));
+            maxSize = PrimeNumber.getNextPrimeNumberAfter(maxSize * 2);
+//            System.out.println(", new maxSize: " + maxSize);
             LinkedList<MapEntry<K, V>>[] oldBuckets = buckets;
-            buckets = new LinkedList[SIZE];
+            buckets = new LinkedList[maxSize];
             for (LinkedList<MapEntry<K, V>> bucket : oldBuckets) {
-                for (MapEntry<K, V> entry : bucket) {
-                    put(entry.getKey(), entry.getValue());
+                if (bucket != null) {
+                    for (MapEntry<K, V> entry : bucket) {
+                        put(entry.getKey(), entry.getValue());
+                    }
                 }
             }
         }
     }
 
     private int getIndex(K key) {
-        return Math.abs(key.hashCode()) % SIZE;
+        return Math.abs(key.hashCode()) % maxSize;
     }
 
     public static void main(String[] args) {

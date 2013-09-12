@@ -21,17 +21,15 @@ public class SimpleHashMap<K, V> extends AbstractMap<K, V> {
 
             boolean found = false;
             MapEntry<K, V> currentEntry = bucket.getFirst();
-            while (currentEntry.getNextEntry() != null) {
-                MapEntry<K, V> iPair = currentEntry.getNextEntry();
+            while (currentEntry != null) {
 
-                if (iPair.getKey().equals(key)) {
-                    oldValue = iPair.getValue();
-                    currentEntry.setNextEntry(pair);
-                    pair.setNextEntry(iPair.getNextEntry());
-                    bucket.set(bucket.indexOf(iPair), pair); // Replace old with new
+                if (currentEntry.getKey().equals(key)) {
+                    oldValue = currentEntry.getValue();
+                    currentEntry.setValue(value);
                     found = true;
                     break;
                 }
+                currentEntry = currentEntry.getNextEntry();
             }
             if (!found) {
                 buckets[index].getLast().setNextEntry(pair);
