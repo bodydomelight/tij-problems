@@ -1,4 +1,6 @@
-package containers.p40;
+package containers.p41;
+
+import java.util.Objects;
 
 public class TwoStringsComparable implements Comparable<TwoStringsComparable> {
 
@@ -26,5 +28,24 @@ public class TwoStringsComparable implements Comparable<TwoStringsComparable> {
     @Override
     public String toString() {
         return "[1:" + a + "; 2:" + b + "]";
+    }
+    @Override
+    public int hashCode() {
+        return a.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final TwoStringsComparable other = (TwoStringsComparable) obj;
+        if (!Objects.equals(this.a, other.a)) {
+            return false;
+        }
+        return true;
     }
 }
