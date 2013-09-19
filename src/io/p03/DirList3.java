@@ -26,11 +26,22 @@ public class DirList3 {
         };
     }
 
+    public static long getTotalSize(File[] files) {
+        long totalSize = 0;
+        for (File file : files) {
+            if (file.isFile()) {
+                totalSize += file.length();
+            }
+        }
+        return totalSize;
+    }
+
     public static void main(String[] args) {
-        String[] newArgs = {"A", "B", "C"};
+        String[] newArgs = {""};
         File path = new File(".\\src\\net\\mindview\\util\\");
-        String[] list = path.list(filter(newArgs));
+        File[] list = path.listFiles(filter(newArgs));
         System.out.println(list.length);
         System.out.println(Arrays.deepToString(list));
+        System.out.println("Total files size is: " + getTotalSize(list) + " bytes.");
     }
 }
