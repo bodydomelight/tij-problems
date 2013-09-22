@@ -2,21 +2,21 @@ package test.chessboardcoverage;
 
 public class Position {
 
-    private static char[] row = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
-    private static char[] column = {'1', '2', '3', '4', '5', '6', '7', '8'};
     private final int x;
     private final int y;
-
-    public Position(int x, int y) {
-        if (x >= 0 && x <= 7 && y >= 0 && y <= 7) {
+    private final Chessboard board;
+    
+    public Position(Chessboard board, int x, int y) {
+        if (x >= 0 && x < board.getHeight() && y >= 0 && y < board.getHeight()) {
             this.x = x;
             this.y = y;
+            this.board = board;
         } else {
             throw new IllegalArgumentException("Coordinates are beyond the chessboard");
         }
     }
-    public Position(char x, int y) {
-        this ((int)x - 97, y - 1);
+    public Position(Chessboard board, char x, int y) {
+        this (board, (int)x - 97, y - 1);
     }
 
     public int getX() {
@@ -29,6 +29,6 @@ public class Position {
 
     @Override
     public String toString() {
-        return String.valueOf(row[x]) + String.valueOf(column[y]);
+        return String.valueOf(board.getWidthName(x)) + String.valueOf(board.getHeightName(y));
     }
 }
