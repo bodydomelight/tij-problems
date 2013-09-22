@@ -4,8 +4,8 @@ public class Chessboard {
 
     private int x;
     private int y;
-    private static char[] row = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
-    private static char[] column = {'1', '2', '3', '4', '5', '6', '7', '8'};
+    private static final char[] ROW = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+    private static final char[] COLUMN = {'1', '2', '3', '4', '5', '6', '7', '8'};
 
     public Chessboard(int x, int y) {
         this.x = x;
@@ -21,10 +21,10 @@ public class Chessboard {
     }
 
     public char getWidthName(int index) {
-        return row[index];
+        return ROW[index];
     }
 
     public char getHeightName(int index) {
-        return column[index];
+        return COLUMN[index];
     }
 }
