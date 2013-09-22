@@ -48,16 +48,4 @@ public class Horse implements PieceStrategy {
         add(x + 1, y + 2, availableMoves);
         return availableMoves;
     }
-
-    public static void main(String[] args) {
-        Horse h = new Horse(new Chessboard(5, 5));
-        Chessboard b = new Chessboard(5, 5);
-        System.out.println("a1 : " + h.getPositions(new Position(b, 'a', 1)));
-        System.out.println("b7 : " + h.getPositions(new Position(b, 'b', 3)));
-        System.out.println("b4 : " + h.getPositions(new Position(b, 'b', 3)));
-        System.out.println("b4 : " + h.getPositions(new Position(b, 1, 3)));
-        System.out.println(new Position(b, 'a', 5));
-        int[] t = new int[1];
-        t[0] = 1;
-    }
 }

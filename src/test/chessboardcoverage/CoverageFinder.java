@@ -1,7 +1,6 @@
 package test.chessboardcoverage;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,6 +10,7 @@ public class CoverageFinder {
     private PieceStrategy piece;
     private boolean[][] chessboard;
     private StringBuilder path = new StringBuilder();
+    private long numberFound = 0;
 
     public CoverageFinder(PieceStrategy p) {
         piece = p;
@@ -48,16 +48,15 @@ public class CoverageFinder {
     private void findPath(Position p) {
         chessboard[p.getX()][p.getY()] = true;
         path.append(p.toString()).append("-");
-//        System.out.println(path);
         List<Position> nextPositions = getNextValidMoves(p);
         if (nextPositions.isEmpty()) {
             if (noEmptySquares()) {
-                System.out.println("path: " + path);
+                System.out.println("path " + (++numberFound) + ": "
+                        + path.substring(0, path.length() - 1));
                 paths.add(path.toString());
             }
         } else {
             for (Position pos : nextPositions) {
-//                System.out.println("recursion: " + pos);
                 findPath(pos);
             }
         }
@@ -67,10 +66,10 @@ public class CoverageFinder {
 
     public List<String> getPaths(Position start) {
         findPath(start);
-        return Collections.unmodifiableList(paths);
+        return paths;
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) { //test
         Chessboard b = new Chessboard(6, 6);
         CoverageFinder cf = new CoverageFinder(new Horse(b));
         List<String> list = cf.getPaths(new Position(b, 'a', 3));
