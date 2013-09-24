@@ -70,9 +70,9 @@ public class CoverageFinder {
     }
 
     public static void main(String[] args) { //test
-        Chessboard b = new Chessboard(6, 6);
+        Chessboard b = new Chessboard(7, 7);
         CoverageFinder cf = new CoverageFinder(new Horse(b));
-        List<String> list = cf.getPaths(new Position(b, 'a', 3));
+        List<String> list = cf.getPaths(new Position(b, 'a', 1));
         System.out.println("list " + list.size());
     }
 }
