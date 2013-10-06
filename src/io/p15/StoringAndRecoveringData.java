@@ -7,7 +7,7 @@ public class StoringAndRecoveringData {
     public static void main(String[] args)
             throws IOException {
         try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(
-                new FileOutputStream(".\\src\\io\\p15\\Data.txt")))) {
+                new FileOutputStream(".\\src\\io\\p15\\Data.dat")))) {
             out.writeBoolean(true);
             out.writeByte((byte) 127);
             out.writeByte((byte) 128);
@@ -22,7 +22,7 @@ public class StoringAndRecoveringData {
             out.writeUTF("Square root of 2");
         }
         DataInputStream in = new DataInputStream(new BufferedInputStream(
-                new FileInputStream(".\\src\\io\\p15\\Data.txt")));
+                new FileInputStream(".\\src\\io\\p15\\Data.dat")));
         System.out.println(in.readBoolean());
         System.out.println(in.readByte());
         System.out.println(in.readUnsignedByte());
