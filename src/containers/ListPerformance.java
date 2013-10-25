@@ -10,13 +10,12 @@ public class ListPerformance {
 
     static Random rand = new Random();
     static int reps = 1000;
-    static List<Test<List<Integer>>> tests
-            = new ArrayList<Test<List<Integer>>>();
-    static List<Test<LinkedList<Integer>>> qTests
-            = new ArrayList<Test<LinkedList<Integer>>>();
+    static List<Test<List<Integer>>> tests = new ArrayList<>();
+    static List<Test<LinkedList<Integer>>> qTests            = new ArrayList<>();
 
     static {
         tests.add(new Test<List<Integer>>("add") {
+            @Override
             int test(List<Integer> list, TestParam tp) {
                 int loops = tp.loops;
                 int listSize = tp.size;
@@ -30,6 +29,7 @@ public class ListPerformance {
             }
         });
         tests.add(new Test<List<Integer>>("get") {
+            @Override
             int test(List<Integer> list, TestParam tp) {
                 int loops = tp.loops * reps;
                 int listSize = list.size();
@@ -40,6 +40,7 @@ public class ListPerformance {
             }
         });
         tests.add(new Test<List<Integer>>("set") {
+            @Override
             int test(List<Integer> list, TestParam tp) {
                 int loops = tp.loops * reps;
                 int listSize = list.size();
@@ -50,6 +51,7 @@ public class ListPerformance {
             }
         });
         tests.add(new Test<List<Integer>>("iteradd") {
+            @Override
             int test(List<Integer> list, TestParam tp) {
                 final int LOOPS = 1000000;
                 int half = list.size() / 2;
@@ -61,6 +63,7 @@ public class ListPerformance {
             }
         });
         tests.add(new Test<List<Integer>>("insert") {
+            @Override
             int test(List<Integer> list, TestParam tp) {
                 int loops = tp.loops;
                 for (int i = 0; i < loops; i++) {
@@ -70,6 +73,7 @@ public class ListPerformance {
             }
         });
         tests.add(new Test<List<Integer>>("remove") {
+            @Override
             int test(List<Integer> list, TestParam tp) {
                 int loops = tp.loops;
                 int size = tp.size;
@@ -85,6 +89,7 @@ public class ListPerformance {
         });
         // Tests for queue behavior:
         qTests.add(new Test<LinkedList<Integer>>("addFirst") {
+            @Override
             int test(LinkedList<Integer> list, TestParam tp) {
                 int loops = tp.loops;
                 int size = tp.size;
@@ -98,6 +103,7 @@ public class ListPerformance {
             }
         });
         qTests.add(new Test<LinkedList<Integer>>("addLast") {
+            @Override
             int test(LinkedList<Integer> list, TestParam tp) {
                 int loops = tp.loops;
                 int size = tp.size;
@@ -112,6 +118,7 @@ public class ListPerformance {
         });
         qTests.add(
                 new Test<LinkedList<Integer>>("rmFirst") {
+                    @Override
                     int test(LinkedList<Integer> list, TestParam tp) {
                         int loops = tp.loops;
                         int size = tp.size;
@@ -126,6 +133,7 @@ public class ListPerformance {
                     }
                 });
         qTests.add(new Test<LinkedList<Integer>>("rmLast") {
+            @Override
             int test(LinkedList<Integer> list, TestParam tp) {
                 int loops = tp.loops;
                 int size = tp.size;
@@ -170,7 +178,7 @@ public class ListPerformance {
         // Can only do these two tests on an array:
         Tester<List<Integer>> arrayTest
                 = new Tester<List<Integer>>(null, tests.subList(1, 3)) {
-        // This will be called before each test. It
+                    // This will be called before each test. It
                     // produces a non-resizeable array-backed list:
                     @Override
                     protected List<Integer> initialize(int size) {
