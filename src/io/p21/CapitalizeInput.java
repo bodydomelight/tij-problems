@@ -10,9 +10,13 @@ public class CapitalizeInput {
         try (BufferedReader br = new BufferedReader(
                 new InputStreamReader(System.in))) {
             String s;
-            while((s = br.readLine()) != null) {
-                System.out.println(s.toUpperCase());
-            }
+            do {
+                System.out.print("Enter a string ('quit' to exit): ");
+                s = br.readLine();
+                if (!s.equalsIgnoreCase("quit")) {
+                    System.out.println(s.toUpperCase());
+                }
+            } while (!s.equalsIgnoreCase("quit"));
         }
     }
 }
