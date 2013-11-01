@@ -18,9 +18,11 @@ public class WordCalc {
     private Map<String, Integer> processText(String path) {
         TextFile text = new TextFile(path, "\\W+");
         Map<String, Integer> words = new HashMap<>();
+        Integer freq;
         for (String word : text) {
             word = word.toLowerCase();
-            words.put(word, words.get(word) == null ? 1 : words.get(word) + 1);
+            freq = words.get(word);
+            words.put(word, freq == null ? 1 : freq + 1);
         }
         return words;
     }
