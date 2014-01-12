@@ -1,0 +1,7 @@
+Quarter; Quarter; Quarter; Chips;
+Dollar; Dollar; Toothpaste;
+Quarter; Dime; AbortTransaction;
+Quarter; Dime; Soda;
+Quarter; Dime; Nickel; Soda;
+AbortTransaction;
+Stop;

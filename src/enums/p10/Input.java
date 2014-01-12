@@ -30,11 +30,10 @@ public enum Input {
     int amount() {
         return value;
     }
-    ; // In cents
-static Random rand = new Random(47);
+    static Random rand = new Random(47);
 
     public static Input randomSelection() {
-// Don’t include STOP:
+        // Don’t include STOP:
         return values()[rand.nextInt(values().length - 1)];
     }
 }
