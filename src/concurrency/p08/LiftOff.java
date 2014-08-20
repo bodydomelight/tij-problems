@@ -17,8 +17,13 @@ public class LiftOff implements Runnable {
         return "#" + id + "(" + (countDown > 0 ? countDown : "Liftoff!") + "), ";
     }
 
+    @Override
     public void run() {
         while (countDown-- > 0) {
+            if (Thread.currentThread().isInterrupted()) {
+                System.out.println("\n" + Thread.currentThread() + " interrupted!");
+                return;
+            }
             System.out.print(status());
             Thread.yield();
         }
